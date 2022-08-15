@@ -25,6 +25,7 @@ public class DoubleJump {
 	ImageIcon ic = new ImageIcon("img/c3gif.gif");
 	Image img = ic.getImage();
 
+	int imgX = 500;
 	int imgY = 250; // 이미지가 시작하는 Y좌표
 
 	boolean fall = false; // 현재 떨어지는지 확인
@@ -128,7 +129,15 @@ public class DoubleJump {
 
 				@Override
 				public void keyPressed(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_SPACE && doubleJump < 2) {// 스페이스 키누르고 더블점프가 2가 아닐때
+					if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+						System.out.println("왼쪽");
+						if(imgX <= 0) imgX = 0;
+						else imgX -= 50;						
+					}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+						System.out.println("오른쪽");
+						if(imgX >= 1200-img.getWidth(null)) imgX = 1200-img.getWidth(null);
+						else imgX += 50;
+					}else if (e.getKeyCode() == KeyEvent.VK_SPACE && doubleJump < 2) {// 스페이스 키누르고 더블점프가 2가 아닐때
 
 						new Thread(new Runnable() {
 
@@ -188,7 +197,7 @@ public class DoubleJump {
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			g.drawImage(img, 500, imgY, this);
+			g.drawImage(img, imgX, imgY, this);
 		}
 
 	}
