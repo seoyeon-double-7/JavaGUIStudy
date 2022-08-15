@@ -20,12 +20,12 @@ public class Jump {
 
 	private JFrame frame;
 
-	int field = 250; // 낙하가 멈추는 지점
+	int field = 500; // 낙하가 멈추는 지점
 
-	ImageIcon ic = new ImageIcon("img/c1gif.gif");
+	ImageIcon ic = new ImageIcon("img/c3gif.gif");
 	Image img = ic.getImage();
 
-	int imgY = 5; // 이미지가 시작하는 Y좌표
+	int imgY = 250; // 이미지가 시작하는 Y좌표
 
 	boolean fall = false; // 현재 떨어지는지 확인
 	boolean jump = false; // 현재 점프중인지 확인
@@ -53,56 +53,8 @@ public class Jump {
 
 	class MyPanel extends JPanel {
 		public MyPanel() {
-			setFocusable(true); 
 
-			addKeyListener(new KeyListener() {
-
-				@Override
-				public void keyTyped(KeyEvent e) {
-				}
-
-				@Override
-				public void keyReleased(KeyEvent e) {
-				}
-
-				@Override
-				public void keyPressed(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_SPACE && jump == false) {// 스페이스 키누르고 점프중이 아닐때
-						new Thread(new Runnable() {
-
-							@Override
-							public void run() {
-
-//									발바닥 위치는 이미지의 y위치 + 이미지의 높이
-								int foot = imgY + img.getHeight(null); // 발바닥위치 y좌표+이미지높이
-
-								if (fall == false) { // 떨어지는 중이 아닐떄 점프
-									jump = true;
-									System.out.println("점프 시작");
-									long t1 = getTime();
-									long t2;
-									int set = 8; // 처음 낙하량까지 테스트
-									int jumpY = 8;
-									while (jumpY > 0) { // 상승 높이가 0일때까지 반복
-										t2 = getTime() - t1; // 지금 시간에서 t1을 뺀다.
-										int jumY = set - (int) ((t2) / 40); // jump 세팅
-										imgY -= jumY; // y값 변경
-										foot = imgY + img.getHeight(null); // 발바닥 위치 저장
-										repaint();
-										try {
-											Thread.sleep(10);
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
-									}
-									jump = false;
-								}
-							}
-
-						}).start();
-					}
-				}
-			});
+			setFocusable(true);
 
 			new Thread(new Runnable() {
 
@@ -123,8 +75,9 @@ public class Jump {
 							int set = 1; // 처음 낙하량까지 테스트
 							while (foot < field) { // 발이 땅에 닿기 전까지 반복
 								t2 = getTime() - t1; // 지금 시간에서 t1을 뺀다.
-								int jumY = set + (int) ((t2) / 40); // 낙하량을 늘림
-								imgY += jumY; // y좌포에 낙하량 더함
+								int jumpY = set + (int) ((t2) / 40); // 낙하량을 늘림
+								System.out.println("착지");
+								imgY = imgY + jumpY; // y좌포에 낙하량 더함
 								foot = imgY + img.getHeight(null); // 현재 발바닥 위치 저장
 								repaint();
 								try {
@@ -144,12 +97,63 @@ public class Jump {
 				}
 
 			}).start();
+
+			addKeyListener(new KeyListener() {
+
+				@Override
+				public void keyTyped(KeyEvent e) {
+				}
+
+				@Override
+				public void keyReleased(KeyEvent e) {
+				}
+
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (e.getKeyCode  () == KeyEvent.VK_SPACE && jump == false) {// 스페이스 키누르고 점프중이 아닐때
+
+						new Thread(new Runnable() {
+
+							@Override
+							public void run() {
+
+//									발바닥 위치는 이미지의 y위치 + 이미지의 높이
+								int foot = imgY + img.getHeight(null); // 발바닥위치 y좌표+이미지높이
+
+								if (fall == false) { // 떨어지는 중이 아닐떄 점프
+									jump = true;
+									System.out.println("점프 시작");
+									long t1 = getTime();
+									long t2;
+									int set = 13; // 처음 낙하량까지 테스트
+									int jumpY = 8;
+									while (jumpY > 0) { // 상승 높이가 0일때까지 반복
+										t2 = getTime() - t1; // 지금 시간에서 t1을 뺀다.
+										jumpY = set - (int) ((t2) / 40); // jump 세팅
+										imgY -= jumpY; // y값 변경
+										foot = imgY + img.getHeight(null); // 발바닥 위치 저장
+										repaint();
+										try {
+											Thread.sleep(10);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									}
+									jump = false;
+								}
+							}
+
+						}).start();
+					}
+				}
+			});
+
 		}
 
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			g.drawImage(img, 100, imgY, this);
+			g.drawImage(img, 500, imgY, this);
 		}
 
 	}
@@ -167,7 +171,7 @@ public class Jump {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
-		frame.setSize(700, 500);
+		frame.setSize(1200, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel panel = new MyPanel();
