@@ -1,6 +1,7 @@
 package scaffolding;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -15,9 +16,20 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Foots {
+public class FadeInOut {
 
 	private JFrame frame;
+
+	Color backFade = new Color(0, 0, 0, 0);
+
+	ImageIcon backIc = new ImageIcon("img/back3.png");
+	Image backImg = backIc.getImage();
+
+//	1번째 이미지
+	int back1X = 0;
+
+//	2번쨰 이미지가 뒤따라 와야하므로 backImg의 넓이를 가져온다.
+	int back2X = backImg.getWidth(null);
 
 	ImageIcon ic = new ImageIcon("img/c2gif.gif");
 	Image img = ic.getImage();
@@ -32,6 +44,9 @@ public class Foots {
 
 	int doubleJump = 0; // 점프 카운트(2가되면 더블점프 상태)
 
+	Image buffImage;
+	Graphics buffg;
+	
 //	시간 가져오기
 	static long getTime() {
 		return Timestamp.valueOf(LocalDateTime.now()).getTime();
@@ -57,7 +72,7 @@ public class Foots {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Foots window = new Foots();
+					FadeInOut window = new FadeInOut();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -216,7 +231,32 @@ public class Foots {
 
 				@Override
 				public void keyPressed(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_SPACE && doubleJump < 2) {// 스페이스 키누르고 더블점프가 2가 아닐때
+					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+						new Thread(new Runnable() {
+
+							@Override
+							public void run() {
+								for (int i = 0; i < 256; i += 2) {
+									backFade = new Color(0, 0, 0, i);
+									try {
+										Thread.sleep(10);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+								}
+								for (int i = 255; i >= 0; i -= 2) {
+									backFade = new Color(0, 0, 0, i);
+									try {
+										Thread.sleep(10);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+								}
+
+							}
+						}).start();
+					}
+						if (e.getKeyCode() == KeyEvent.VK_SPACE && doubleJump < 2) {// 스페이스 키누르고 더블점프가 2가 아닐때
 
 						new Thread(new Runnable() {
 
@@ -271,6 +311,36 @@ public class Foots {
 				}
 			});
 
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					while (true) {
+						back1X--;
+						back2X--;
+
+//						이미지가 화면 밖으로 완전히 나가면
+//						X축을 이미지의 넓이 좌표로 다시 옮긴다.
+//						1번 이미지가 먼저 나가서 2번 뒤에 붙고
+//						2번 이미지가 나가면 다시 1번 뒤에 붇는 다.
+
+						if (back1X < -(backImg.getWidth(null))) {
+							back1X = backImg.getWidth(null);
+						}
+						if (back2X < -(backImg.getWidth(null))) {
+							back2X = backImg.getWidth(null);
+						}
+
+						repaint();
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}).start();
+
 			for (int i = 0; i < fieldStr.length(); i++) { // fieldStr의 길이 만큼 반복
 				int tempX = i * landimg.getWidth(null); // 반복할때마다 x좌표를 늘려준다.
 				if (getGround(fieldStr, i) == 1) { // fieldStr로 땅이 있는 위치에만 발판을 설치한다.
@@ -283,25 +353,42 @@ public class Foots {
 
 		@Override
 		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-
+			
+			if(buffg == null) {
+				buffImage = createImage(this.getWidth(), this.getHeight());
+				if(buffImage== null) {
+					System.out.println("더블 버퍼링용 오프 스크린 생성 실패");
+				}else {
+					buffg = buffImage.getGraphics();
+				}
+			}
+			
+			buffg.drawImage(backImg, back1X,0, backImg.getWidth(this) + 10, (int) (backImg.getHeight(this) * 1.5), null);
+			buffg.drawImage(backImg, back2X,0, backImg.getWidth(this) + 10, (int) (backImg.getHeight(this) * 1.5), null);
+			
+			buffg.setColor(backFade);
+			buffg.fillRect(0, 0, this.getWidth(), this.getHeight());
+			
+			            
+			
 			for (int i = 0; i < fieldList.size(); i++) {
 				Image tempImg = fieldList.get(i).getImage();
 				int tempX = fieldList.get(i).getX();
 				int tempY = fieldList.get(i).getY();
 				int tempWidth = fieldList.get(i).getWidth();
 				int tempHeight = fieldList.get(i).getHeight();
-				g.drawImage(tempImg, tempX, tempY, tempWidth, tempHeight, null);
+				buffg.drawImage(tempImg, tempX, tempY, tempWidth, tempHeight, null);
 			}
 
-			g.drawImage(img, landimg.getWidth(null) / 2, imgY, img.getWidth(null), img.getHeight(null), this);
+			buffg.drawImage(img, landimg.getWidth(null) / 2, imgY, img.getWidth(null), img.getHeight(null), this);
+			g.drawImage(buffImage, 0, 0, this);
 		}
 	}
 
 	/**
 	 * Create the application.
 	 */
-	public Foots() {
+	public FadeInOut() {
 		initialize();
 	}
 
@@ -311,7 +398,7 @@ public class Foots {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
-		frame.setSize(1200, 800);
+		frame.setSize(1200, 600);
 		frame.setTitle("jump rabbit");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
