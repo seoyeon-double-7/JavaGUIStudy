@@ -22,10 +22,11 @@ public class DoubleJump {
 
 	int field = 500; // 낙하가 멈추는 지점
 
-	ImageIcon ic = new ImageIcon("img/c3gif.gif");
+	ImageIcon ic = new ImageIcon("img/c2gif.gif");
+//	ImageIcon ic = new ImageIcon("img/rabbit_b.png");
 	Image img = ic.getImage();
 
-	int imgX = 500;
+	int imgX = 100;
 	int imgY = 250; // 이미지가 시작하는 Y좌표
 
 	boolean fall = false; // 현재 떨어지는지 확인

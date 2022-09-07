@@ -13,7 +13,7 @@ import java.awt.BorderLayout;
 
 public class getItem {
 
-	ImageIcon backIc = new ImageIcon("img/back1.png");
+	ImageIcon backIc = new ImageIcon("img/back3.png");
 	Image backImg = backIc.getImage();
 	
 	ImageIcon jellyIc1 = new ImageIcon("img/jelly1.png");
@@ -22,15 +22,15 @@ public class getItem {
 	ImageIcon carrotIc1 = new ImageIcon("img/carrot.png");
 	Image carrot = carrotIc1.getImage();
 	
-	ImageIcon bonusFirstCookieIc = new ImageIcon("img/rabbit_b.png");
+	ImageIcon bonusFirstCookieIc = new ImageIcon("img/c2gif.gif");
 	Image bonusFirstCookie = bonusFirstCookieIc.getImage();
 	
 	List<Item> imgList = new ArrayList<>();
 	
-//	1ë²ˆì§¸ ?´ë¯¸ì?
+//  1ë²ˆì§¸ ì´ë¯¸ì§€
 	int back1X = 0;
 	
-//	2ë²ˆì?? ?´ë¯¸ì?ê°? ?’¤?”°?¼ ???•¼?•˜ë¯?ë¡? backImg?˜ ?„“?´ë¥? ê°?? ¸?˜¨?‹¤.
+//  2ë²ˆì¨° ì´ë¯¸ì§€ê°€ ë’¤ë”°ë¼ ì™€ì•¼í•˜ë¯€ë¡œ backImgì˜ ë„“ì´ë¥¼ ê°€ì ¸ì˜¨ë‹¤.
 	int back2X = backImg.getWidth(null);
 	
 	int jellyX = 400;
@@ -79,11 +79,7 @@ public class getItem {
 					while(true) {
 						back1X--;
 						back2X--;
-						
-//						?´ë¯¸ì?ê°? ?™”ë©? ë°–ìœ¼ë¡? ?™„? „?ˆ ?‚˜ê°?ë©?
-//						Xì¶•ì„ ?´ë¯¸ì??˜ ?„“?´ ì¢Œí‘œë¡? ?‹¤?‹œ ?˜®ê¸´ë‹¤.
-//						1ë²? ?´ë¯¸ì?ê°? ë¨¼ì? ?‚˜ê°??„œ 2ë²? ?’¤?— ë¶™ê³ 
-//						2ë²? ?´ë¯¸ì?ê°? ?‚˜ê°?ë©? ?‹¤?‹œ 1ë²? ?’¤?— ë¶‡ëŠ” ?‹¤.
+
 						
 						if(back1X < -(backImg.getWidth(null))) {
 							back1X = backImg.getWidth(null);
@@ -92,12 +88,12 @@ public class getItem {
 							back2X = backImg.getWidth(null);
 						}
 						
-//						?•„?´?…œ?“¤?˜ ?´ë¯¸ì?ë¥? ëª¨ë‘ ?´?™?‹œ?‚¨?‹¤. (? ¤ë¦¬ë“¤?˜ Xì¢Œí‘œë¥? ì¤„ì´?Š” ê²?)
+//						ì•„ì´í…œ x ì¢Œí‘œ ì¤„ì—¬ì£¼ê¸°
 						for(int i= 0; i < imgList.size(); i++) {
 							imgList.get(i).setX(imgList.get(i).getX()-3);
 						}
 						
-//						?•„?´?…œ?“¤?´ ìºë¦­?„° ?´ë¯¸ì? ë²”ìœ„ ?•ˆ?— ?“¤?–´?˜¤ë©? ? œê±°ëœ?‹¤. (ìºë¦­?„° ?´ë¯¸ì??— ? ¤ë¦¬ì˜ ?‹œ?‘ ì¢Œí‘œê°? ë§Œë‚˜ë©? ?‚¬?¼ì§?)
+//						ìºë¦­í„°, ì•„ì´í…œ ì¢Œí‘œ ë§Œë‚ ë•Œ remove í•´ì£¼ê¸°
 						for(int i= 0; i < imgList.size(); i++) {
 							if(imgList.get(0).getX() > c1X
 								&& imgList.get(0).getX() < c1X + bonusFirstCookie.getWidth(null)
@@ -121,11 +117,11 @@ public class getItem {
 		}
 
 		@Override
-		protected void paintComponent(Graphics g) {	//ê·¸ë¦¼ ê·¸ë ¤ì£¼ëŠ” ë©”ì„œ?“œ
-			super.paintComponent(g);	//ìº”ë²„?Š¤ë¥? ë¹„ì›Œì£¼ëŠ” ë©”ì„œ?“œ
+		protected void paintComponent(Graphics g) {	//ê·¸ë¦¼ ê·¸ë ¤ì£¼ëŠ” ë©”ì„œë“œ
+			super.paintComponent(g);	//ìº”ë²„ìŠ¤ ë¹„ì›Œì£¼ëŠ” ë©”ì„œë“œ
 			
-			g.drawImage(backImg, back1X, 0, this);	//1ë²? ê·¸ë¦¼		
-			g.drawImage(backImg, back2X, 0, this);	//2ë²? ê·¸ë¦¼
+			g.drawImage(backImg, back1X, 0, this);	//1ë²ˆì§¸ ê·¸ë¦¼		
+			g.drawImage(backImg, back2X, 0, this);	//2ë²ˆì§¸ ê·¸ë¦¼
 		
 			
 			for(int i=0; i<imgList.size(); i++) {
@@ -148,9 +144,9 @@ public class getItem {
 
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("jump rabbit?Ÿ?");
+		frame.setTitle("jump rabbitğŸ°");
 		frame.setBounds(100, 100, 450, 300);
-//		frame.setSize(700, 350);
+		frame.setSize(1200, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panel = new MyPanel();

@@ -29,6 +29,7 @@ public class EatJelly {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -44,6 +45,8 @@ public class EatJelly {
 	class MyPanel extends JPanel {
 
 		public MyPanel() {
+			setFocusable(true);
+			
 //			패널에 젤리 추가
 //			이미지, 시작 좌표 크기, 투명도 설정
 			j1 = new Jelly(jellyIc.getImage(), 500, 150, 20, 20, 255);
@@ -54,45 +57,49 @@ public class EatJelly {
 
 				@Override
 				public void run() {
-					System.out.println("쓰레드 실행");
-//					젤리들을 왼쪽으로 이동시킨다.
-					j1.setX(j1.getX() - 1);
-					j2.setX(j2.getX() - 1);
+					
+					while(true) {
+//						젤리들을 왼쪽으로 이동시킨다.
+						j1.setX(j1.getX() - 1);
+						j2.setX(j2.getX() - 1);
+						System.out.println("젤리 이동중!");
 
-//					젤리가 범위 안에 들어오면 이미지를 바꾸고 알파값을 줄인다.
-					if (j1.getX() < 300) {
-						j1.setImage(effIc.getImage());
+//						젤리가 범위 안에 들어오면 이미지를 바꾸고 알파값을 줄인다.
+						if (j1.getX() < 300) {
+							j1.setImage(effIc.getImage());
 
-						if (j1.getAlpha() > 1) {
-							j1.setAlpha(j1.getAlpha() - 2);
+							if (j1.getAlpha() > 1) {
+								j1.setAlpha(j1.getAlpha() - 2);
+							}
 						}
-					}
 
-					if (j2.getX() < 300) {
-						j2.setImage(effIc.getImage());
+						if (j2.getX() < 300) {
+							j2.setImage(effIc.getImage());
 
-						if (j2.getAlpha() > 1) {
-							j2.setAlpha(j2.getAlpha() - 2);
+							if (j2.getAlpha() > 1) {
+								j2.setAlpha(j2.getAlpha() - 2);
+							}
 						}
-					}
 
-					repaint();
+						repaint();
 
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 
 				}
 
-			});
+			}).start();
 		}
 
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			Graphics2D g2 = (Graphics2D) g;
+			Graphics2D g2 = (Graphics2D)g;
+			
 //			검은 배경
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, this.getWidth(), this.getHeight());
